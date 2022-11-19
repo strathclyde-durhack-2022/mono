@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 export interface IDataPerFrame {
   Symbol: string;
   EventTime: number;
@@ -30,40 +31,48 @@ export interface IDataPerFrame {
   }
 }
 */
-const URL_WEB_SOCKET = 'wss://stream.binance.com:443/ws';
+const URL_WEB_SOCKET = "wss://stream.binance.com:443/ws";
 
+const Connection = (props: {
+  Symbols: Array<string>;
+  onMessage: (data: IDataPerFrame) => void;
+}) => {
+  const [ws, setWs] = useState<WebSocket | null>(null);
 
-export class Connection {
-  private ws: WebSocket | null = null;
-
-  onMessage(data:IDataPerFrame): void {
-    console.log(data);
-  }
-
-  constructor(Symbols: Array<string>, onMessage: (data: any) => void){
-    const requesparams = Symbols.map(s=>    s+"@kline_1s"   )
-    console.log(requesparams,Symbols)
+  useEffect(() => {
+    const requesparams = props.Symbols.map((s) => s + "@kline_1s");
+    console.log(requesparams, props.Symbols);
     const request = {
-      method: 'SUBSCRIBE',
+      method: "SUBSCRIBE",
       params: requesparams,
       id: 1,
     };
     const wsClient = new WebSocket(URL_WEB_SOCKET);
     wsClient.onopen = () => {
-      this.ws = wsClient;
+      setWs(wsClient);
       wsClient.send(JSON.stringify(request));
     };
-    wsClient.onmessage = (evt) => {
-      const trade = JSON.parse(evt.data);  
-      const currData:IDataPerFrame = {Symbol: trade["k"]["s"] , EventTime: trade["E"], Price: (Number(trade["k"]["o"])+Number(trade["k"]["c"]))/2}
-      console.log(currData);
-      onMessage(currData);
+    wsClient.onclose = () => console.log("ws closed");
+    return () => {
+      wsClient.close();
     };
-    wsClient.onclose = () => console.log('ws closed');
+  }, []);
 
-  }
-  
-  closStream() {
-    this.ws?.close();
-  }
+  useEffect(() => {
+    if (ws) {
+      ws.onmessage = (evt) => {
+        const trade = JSON.parse(evt.data);
+        const currData: IDataPerFrame = {
+          Symbol: trade["k"]["s"],
+          EventTime: trade["E"],
+          Price: (Number(trade["k"]["o"]) + Number(trade["k"]["c"])) / 2,
+        };
+        console.log(currData);
+        props.onMessage(currData);
+      };
+    }
+  }, [ws]);
+
+  return <></>;
 };
+export default Connection;

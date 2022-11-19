@@ -6,7 +6,7 @@ const Nav = () => {
             <div className="flex h-full flex-row">
                 <ul className="flex flex-row items-center justify-center space-x-16 font-normal">
                     <li><Link to="/" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">Home</Link></li>
-                    <li><Link to="/graph" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">Graph</Link></li>
+                    <li><Link to="/game" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">Graph</Link></li>
                 </ul>
             </div>
         </div>
