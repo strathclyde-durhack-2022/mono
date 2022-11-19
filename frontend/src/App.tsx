@@ -1,5 +1,6 @@
+// @ts-ignore
 import Home from "./pages/Home.jsx"
-
+import GameChart from "./components/GameChart"
 import {
   BrowserRouter as Router,
   Routes, 
@@ -11,6 +12,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/game" element={<GameChart />} />
       </Routes>
     </Router>
   )
