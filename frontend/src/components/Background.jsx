@@ -33,7 +33,7 @@ const Background = () => {
       };
     }, [vantaEffect]);
     return (
-      <div ref={vantaRef} className="z-2 h-screen w-screen">
+      <div ref={vantaRef} className="z-2 h-screen w-screen overflow-hidden">
         <Nav />
         <HomeMain />
       </div>
