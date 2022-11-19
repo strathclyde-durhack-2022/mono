@@ -6,8 +6,8 @@ import Connection from './components/connection'
 function App() {
   const [count, setCount] = useState(0)
   const [alldata, setAlldata] = useState({});
-  const Symbolsdata:Array<string> = ['btcusdt@kline_1s','ethusdt@kline_1s']
-  // const Symbolsdata:Array<string> = ['btcusdt','ethusdt']
+  // const Symbolsdata:Array<string> = ['btcusdt@kline_1s','ethusdt@kline_1s']
+  const Symbolsdata:Array<string> = ['btcusdt','ethusdt']
  
   // useEffect(() => {
   //    console.log(alldata)

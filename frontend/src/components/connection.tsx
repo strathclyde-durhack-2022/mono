@@ -37,15 +37,21 @@ const URL_WEB_SOCKET = 'wss://stream.binance.com:443/ws';
 
 
 const Connection = (props: {Symbols: Array<string>; onMessage: (data: any) => void}) => {
+  
   const [ws, setWs] = useState<WebSocket | null>(null);  
   
-  const request = {
-    method: 'SUBSCRIBE',
-    params: props.Symbols,
-    id: 1,
-  };
+  
 
   useEffect(() => {
+    const requesparams = props.Symbols.map(s=>
+       s+"@kline_1s"   
+     )
+    console.log(requesparams,props.Symbols)
+    const request = {
+      method: 'SUBSCRIBE',
+      params: requesparams,
+      id: 1,
+    };
     const wsClient = new WebSocket(URL_WEB_SOCKET);
     wsClient.onopen = () => {
       setWs(wsClient);
