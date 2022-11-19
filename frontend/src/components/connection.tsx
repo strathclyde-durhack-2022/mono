@@ -5,7 +5,7 @@ const request = {
   params: ['btcusdt@trade'],
   id: 1,
 };
-const Home = () => {
+const Connection = () => {
   const [ws, setWs] = useState<WebSocket | null>(null);
   const [trades, setTrades] = useState([]);
 
@@ -45,4 +45,4 @@ const Home = () => {
 
   return (<div className="app__home"></div>);
 };
-export default Home;
+export default Connection;
