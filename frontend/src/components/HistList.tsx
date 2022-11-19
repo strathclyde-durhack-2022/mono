@@ -1,5 +1,5 @@
 import react, { useState } from 'react'
-import IHistory from "./Interface"
+import IHistory from "../models/Interface"
 
 export default function HistList(props:{hist: IHistory[]}): JSX.Element {
   let key = 0 //for key in map
