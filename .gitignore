@@ -185,3 +185,5 @@ archive.zip
 *~
 .*.sw?
 node_modules
+
+package-lock.json
