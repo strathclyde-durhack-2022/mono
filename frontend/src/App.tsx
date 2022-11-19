@@ -1,11 +1,17 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import './App.css'
 import Connection from './components/connection'
 
 function App() {
   const [count, setCount] = useState(0)
-
+  const [alldata, setAlldata] = useState({});
+  const Symbolsdata:Array<string> = ['btcusdt@kline_1s','ethusdt@kline_1s']
+  // const Symbolsdata:Array<string> = ['btcusdt','ethusdt']
+ 
+  // useEffect(() => {
+  //    console.log(alldata)
+  // }, [alldata]);
   return (
     <div className="App">
       <div>
@@ -28,7 +34,11 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
-      <Connection />
+      <Connection Symbols={Symbolsdata} onMessage={(data) => {
+          //  setAlldata((Alldata:any)=>{
+          //   Alldata[data.Symbol].push(data);
+          // })
+      }}/>
     </div>
   )
 }
