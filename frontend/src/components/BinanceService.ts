@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
-interface iDataPerFrame {
+export interface IDataPerFrame {
   Symbol: string;
   EventTime: number;
   Price: number;
 }
-
-export type {iDataPerFrame};
 /*
 <symbol>@kline_<interval>
 {
@@ -36,17 +33,16 @@ export type {iDataPerFrame};
 const URL_WEB_SOCKET = 'wss://stream.binance.com:443/ws';
 
 
-const Connection = (props: {Symbols: Array<string>; onMessage: (data: any) => void}) => {
-  
-  const [ws, setWs] = useState<WebSocket | null>(null);  
-  
-  
+export class Connection {
+  private ws: WebSocket | null = null;
 
-  useEffect(() => {
-    const requesparams = props.Symbols.map(s=>
-       s+"@kline_1s"   
-     )
-    console.log(requesparams,props.Symbols)
+  onMessage(data:IDataPerFrame): void {
+    console.log(data);
+  }
+
+  constructor(Symbols: Array<string>, onMessage: (data: any) => void){
+    const requesparams = Symbols.map(s=>    s+"@kline_1s"   )
+    console.log(requesparams,Symbols)
     const request = {
       method: 'SUBSCRIBE',
       params: requesparams,
@@ -54,28 +50,20 @@ const Connection = (props: {Symbols: Array<string>; onMessage: (data: any) => vo
     };
     const wsClient = new WebSocket(URL_WEB_SOCKET);
     wsClient.onopen = () => {
-      setWs(wsClient);
+      this.ws = wsClient;
       wsClient.send(JSON.stringify(request));
     };
-    wsClient.onclose = () => console.log('ws closed');
-    return () => {
-      wsClient.close();
+    wsClient.onmessage = (evt) => {
+      const trade = JSON.parse(evt.data);  
+      const currData:IDataPerFrame = {Symbol: trade["k"]["s"] , EventTime: trade["E"], Price: (Number(trade["k"]["o"])+Number(trade["k"]["c"]))/2}
+      console.log(currData);
+      onMessage(currData);
     };
-  }, []);
+    wsClient.onclose = () => console.log('ws closed');
 
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (evt) => {
-        const trade = JSON.parse(evt.data);  
-        const currData:iDataPerFrame = {Symbol: trade["k"]["s"] , EventTime: trade["E"], Price: (Number(trade["k"]["o"])+Number(trade["k"]["c"]))/2}
-        console.log(currData);
-        props.onMessage(currData);
-      };
-    }
-  }, [ws]);
-
- 
-
-  return (<></>);
+  }
+  
+  closStream() {
+    this.ws?.close();
+  }
 };
-export default Connection;
