@@ -1,11 +1,11 @@
-import { Fragment } from 'react'
-import { Menu, Transition } from '@headlessui/react'
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { Fragment } from "react";
+import { Menu, Transition } from "@headlessui/react";
+import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
-import GuessItem from './GuessItem.jsx';
+import GuessItem from "./GuessItem.js";
+import IHistory from "./Interface.js";
 
-
-export default function GuessDropdown(props) {
+export default function GuessDropdown(props: { ticker: IHistory[] }) {
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -26,17 +26,12 @@ export default function GuessDropdown(props) {
       >
         <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
-
-            { props.ticker.map (( element, index ) =>
-                <GuessItem 
-                    key={index}
-                    name={element.coin}
-                />
-            )}
-
+            {props.ticker.map((element, index) => (
+              <GuessItem key={index} name={element.coin} />
+            ))}
           </div>
         </Menu.Items>
       </Transition>
     </Menu>
-  )
+  );
 }
