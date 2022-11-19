@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
 from utils import something_crud as crud
-from schemas import Something
+from backend.schemas import Something
 
 router = APIRouter(
     tags=["something"],
