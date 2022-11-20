@@ -4,4 +4,10 @@ export interface IHistory {
   result: number;
 }
 
+export interface IScore {
+  username: string; 
+  score: number;
+  totalGuess:number;
+}
+
 export type ICoin = string;
