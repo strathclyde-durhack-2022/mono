@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { createRef, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Connection, { IDataPerFrame } from "./Connection";
 
 import Guess from "./Guess.jsx";
@@ -35,52 +35,45 @@ export interface ITickerWithData {
 }
 
 export const MAX_TICKS = 60;
+export const TICKS_PER_SECOND = 1;
+
+const DEFAULT_COINS = [
+  { internalName: "btcusdt", label: "BTC", colour: "orange" },
+  {
+    internalName: "ethusdt",
+    label: "ETH",
+    colour: "gray",
+  },
+  {
+    internalName: "xmrusdt",
+    label: "XMR",
+    colour: "red",
+  },
+].map((c) => ({ ...c, data: [], startingPrice: 0 }));
 
 function GameChart() {
   const [tickerCount, setTickerCount] = useState<number>(0);
   const [streaming, setStreaming] = useState<boolean>(false);
   const [selectedCoin, setSelectedCoin] = useState<string>();
-  const [data, setData] = useState<ITickerWithData[]>([
-    {
-      internalName: "btcusdt",
-      label: "BTC",
-      colour: "orange",
-      data: [],
-      startingPrice: 0,
-    },
-    {
-      internalName: "ethusdt",
-      label: "ETH",
-      colour: "gray",
-      data: [],
-      startingPrice: 0,
-    },
-    {
-      internalName: "xmrusdt",
-      label: "XMR",
-      colour: "red",
-      data: [],
-      startingPrice: 0,
-    },
-  ]);
+  const [data, setData] = useState<ITickerWithData[]>(DEFAULT_COINS);
 
   const reset = () => {
     setStreaming(false);
-    setData([]);
+    setData(DEFAULT_COINS);
     setTickerCount(0);
   };
 
   const getFinalScore = () => {
-    if (data.length === 0 || !data[0]?.data?.[0]?.Price) return data;
-    data.sort(
+    if (data.length === 0 || data[0].data.length < 2) return [...data];
+    return [...data].sort(
       (a, b) =>
-        a.data[a.data.length - 1].Price - b.data[b.data.length - 1].Price
+        b.data[b.data.length - 1].Price - a.data[a.data.length - 1].Price
     );
-    return data;
   };
 
   useEffect(() => {
-    if (Math.round(tickerCount) === MAX_TICKS + 1) setStreaming(false);
+    if (Math.round(tickerCount) === MAX_TICKS * TICKS_PER_SECOND + 1)
+      setStreaming(false);
   }, [tickerCount]);
 
   return (
@@ -92,18 +85,14 @@ function GameChart() {
             type="line"
             options={{
               animations: {
-                y: {
-                  type: "number",
-                  easing: "linear",
-                  duration: 1,
-                  from: NaN,
-                },
+                y: { type: "number", easing: "linear", duration: 1, from: NaN },
               },
+              scales: { y: { ticks: { callback: (value) => `${value}%` } } },
             }}
             data={{
-              labels: Array(60)
+              labels: Array(MAX_TICKS * TICKS_PER_SECOND)
                 .fill(0)
-                .map((_, i) => i),
+                .map((_, i) => `${Math.round(i / TICKS_PER_SECOND)}s `),
               datasets: data.map((d) => ({
                 data: d.data.map((d) => d.Price),
                 label: d.label,
@@ -168,8 +157,8 @@ function GameChart() {
             onChange={(coin) => setSelectedCoin(coin)}
           />
           {getFinalScore()
-            .map((d, i) => `${i + 1}. ${d.label}`)
-            .join(", ")}
+            ?.map((d, i) => `${i + 1}. ${d.label}`)
+            ?.join(", ")}
         </div>
       </div>
     </div>
