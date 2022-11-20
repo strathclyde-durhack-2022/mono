@@ -72,6 +72,9 @@ function GameChart() {
   const [selectedCoin, setSelectedCoin] = useState<string>();
   const [data, setData] = useState<ITickerWithData[]>(DEFAULT_COINS);
 
+  const [message, setMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [backMessage, setBackMessage] = useState('');
   const [modalIsOpenSuccess, setIsOpenSuccess] = useState(false);
   const [modalIsOpenFailure, setIsOpenFailure] = useState(false);
 
@@ -106,7 +109,19 @@ function GameChart() {
   };
 
   useEffect(() => {
-    if (Math.round(tickerCount) === MAX_TICKS + 1) setStreaming(false);
+    if (Math.round(tickerCount) === MAX_TICKS + 1) {
+      setStreaming(false);
+      if (selectedCoin === getFinalScore()[0].label) {
+        setMessage(`Well done, you have guessed the ticker correctly!`)
+        setSuccessMessage('Correct guess!')
+        setBackMessage('Go back')
+        openModalSuccess()
+      } else {
+        setBackMessage('Go back')
+        setMessage(`Unfortunately... your guess was incorrect. Feel free to try again!`)
+        openModalFailure()
+      }
+    }
   }, [tickerCount]);
 
   return (
@@ -183,18 +198,16 @@ function GameChart() {
                     </p>
               </div>
 
-            <div className="flex flex-row space-x-8 ">
-              <div>
+            <div className="flex flex-row space-x-8 w-4/5">
                 {tickerCount < MAX_TICKS / 2 && (
-                  <>
+                  <div>
                     <Guess
                       coins={data.map((d) => d.label)}
                       onChange={(coin) => setSelectedCoin(coin)}
                       selected={selectedCoin}
                     />
-                  </>
+                  </div>
                 )}
-              </div>
               <button 
                 className="flex w-2/3 shadow-2xl items-center justify-center rounded-md bg-red-700 text-sm font-semibold text-white opacity-80 transition duration-300 ease-in-out hover:opacity-100
                 sm:pt-[10px] sm:pb-[10px] sm:pl-[25px] sm:pr-[25px]"
@@ -227,13 +240,14 @@ function GameChart() {
 
             {Math.round(tickerCount) === MAX_TICKS + 1 && (
               <p>
-                {selectedCoin === getFinalScore()[0].label
-                  ? <ModalSuccess modalState={modalIsOpenSuccess} closeModalFunction={closeModalSuccess} styles={customStyles} message={"You guessed correctly, well done!"} successMessage={"Well done!"} backMessage={"Go back"} />
-                  : <ModalFail modalState={modalIsOpenFailure} closeModalFunction={closeModalFailure} styles={customStyles} message={"So close... but unfortunately your guess was incorrect."} backMessage={"Go back"} />}
+                {selectedCoin === getFinalScore()[0].label}
               </p>
             )}
           </div>
         </div>
+
+        { <ModalSuccess modalState={modalIsOpenSuccess} closeModalFunction={closeModalSuccess} styles={customStyles} message={message} successMessage={successMessage} backMessage={backMessage} /> }
+        { <ModalFail modalState={modalIsOpenFailure} closeModalFunction={closeModalFailure} styles={customStyles} message={message} backMessage={backMessage} /> }
     </div>
   );
 }
