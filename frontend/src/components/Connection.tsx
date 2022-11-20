@@ -62,6 +62,7 @@ const Connection = (props: {
     if (ws) {
       ws.onmessage = (evt) => {
         const trade = JSON.parse(evt.data);
+        if (!trade.k) return;
         const currData: IDataPerFrame = {
           Symbol: trade["k"]["s"],
           EventTime: trade["E"],
