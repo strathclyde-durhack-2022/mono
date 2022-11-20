@@ -9,13 +9,9 @@ router.get("/:numberOfItem", async (req:any, res:any) => {
 	res.send(scores)
 })
 
-router.post("/", async (req:any, res:any) => {
-	const score = new Score({
-		username: req.body.username,
-		score: req.body.score,
-	})
-	await score.save()
-	res.send(score)
+router.post("/", async (req:any, res:any) => { 
+	await Score.findOneAndUpdate({username: req.body.username}, { $inc: { totalGuess: 1 , score: req.body.correct }}, {upsert: true} ); 
+	res.send("success")
 })
 
 module.exports = router
