@@ -1,8 +1,10 @@
 import GuessDropdown from "./GuessDropdown";
-import { MOCK_HIST } from "./History";
-
-const Guess = () => {
-  return <GuessDropdown ticker={MOCK_HIST} />;
+import { ICoin } from "./Interface";
+const Guess = (props: {
+  coins: ICoin[];
+  onChange: (selected: string) => void;
+}) => {
+  return <GuessDropdown ticker={props.coins} onChange={props.onChange} />;
 };
 
 export default Guess;

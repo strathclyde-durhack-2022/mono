@@ -1,7 +1,7 @@
-interface IHistory { //for mockData, subject to change
-    coin: string;
-    guess: number;
-    result: number;
+export interface IHistory {
+  coin: ICoin;
+  guess: number;
+  result: number;
 }
 
-export default IHistory
+export type ICoin = string;

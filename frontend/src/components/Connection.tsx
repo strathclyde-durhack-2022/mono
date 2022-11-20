@@ -36,40 +36,46 @@ const URL_WEB_SOCKET = "wss://stream.binance.com:443/ws";
 const Connection = (props: {
   Symbols: Array<string>;
   onMessage: (data: IDataPerFrame) => void;
+  start: boolean;
 }) => {
   const [ws, setWs] = useState<WebSocket | null>(null);
 
   const close = () => {
     if (ws) ws.close();
+    setWs(null);
   };
 
   useEffect(() => {
-    const request = {
-      method: "SUBSCRIBE",
-      params: props.Symbols.map((s) => s + "@kline_1s"),
-      id: 1,
-    };
-    const wsClient = new WebSocket(URL_WEB_SOCKET);
-    wsClient.onopen = () => {
-      setWs(wsClient);
-      wsClient.send(JSON.stringify(request));
-    };
-    wsClient.onclose = () => console.log("ws closed");
-    wsClient.onmessage = (evt) => {
-      const trade = JSON.parse(evt.data);
-      if (!trade.k) return;
-      const currData: IDataPerFrame = {
-        Symbol: trade["k"]["s"],
-        EventTime: trade["E"],
-        Price: (Number(trade["k"]["o"]) + Number(trade["k"]["c"])) / 2,
+    if (props.start) {
+      const request = {
+        method: "SUBSCRIBE",
+        params: props.Symbols.map((s) => s + "@kline_1s"),
+        id: 1,
       };
-      console.log(currData);
-      props.onMessage(currData);
-    };
-    return () => {
-      wsClient.close();
-    };
-  }, []);
+      const wsClient = new WebSocket(URL_WEB_SOCKET);
+      wsClient.onopen = () => {
+        setWs(wsClient);
+        wsClient.send(JSON.stringify(request));
+      };
+      wsClient.onmessage = (evt) => {
+        const trade = JSON.parse(evt.data);
+        if (!trade.k) return;
+        const currData: IDataPerFrame = {
+          Symbol: trade["k"]["s"],
+          EventTime: trade["E"],
+          Price: (Number(trade["k"]["o"]) + Number(trade["k"]["c"])) / 2,
+        };
+        console.log(currData);
+        props.onMessage(currData);
+      };
+      wsClient.onclose = () => console.log("ws closed");
+      // return () => {
+      //   wsClient.close();
+      // };
+    } else {
+      close();
+    }
+  }, [props.start]);
 
   return <></>;
 };
