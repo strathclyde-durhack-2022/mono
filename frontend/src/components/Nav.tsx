@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom'
-
+import Grid from '@mui/material/Grid'
 const Nav = () => {
     return (
+        <Grid Container xs={12}>
         <div className="max-h-1/6 sticky top-0 z-50 flex w-screen flex-row justify-center py-6 px-20 backdrop-blur-sm">
             <div className="flex h-full flex-row">
                 <ul className="flex flex-row items-center justify-center space-x-16 font-normal">
@@ -11,6 +12,7 @@ const Nav = () => {
                 </ul>
             </div>
         </div>
+        </Grid>
     )
 }
 

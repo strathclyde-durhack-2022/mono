@@ -11,10 +11,10 @@ import {
 } from "chart.js";
 import { useEffect, useState } from "react";
 import Connection, { IDataPerFrame } from "./Connection";
-
+import Game from './Game';
 import Guess from "./Guess.jsx";
 import Nav from "./Nav.jsx";
-
+import {Grid, Item} from "@mui/material"
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -62,11 +62,29 @@ function GameChart() {
   useEffect(() => {}, []);
 
   return (
-    <div className="h-screen w-screen space-y-16 overflow-hidden">
-      <Nav />
-      <div className="flex flex-row justify-between space-x-32 items-start h-[90vw] mx-24">
-        <div className="flex flex-col items-center w-screen">
-          <Chart
+    // <div className="h-screen w-screen space-y-16 overflow-hidden">
+    //   
+    //   <div className="flex flex-row justify-between space-x-32 items-start h-[90vw] mx-24">
+    //     <div className="flex flex-col items-center w-screen">
+    //      
+    //      
+    //     </div>
+    //     <div className="flex justify-center items-center h-1/3">
+    //      
+    //      
+    //     </div>
+    //   </div>
+      
+    // </div>
+    <>
+    <Grid container rowSpacing={1} >
+  <Grid item xs={12}>
+     <Nav /> 
+  </Grid>
+  <Grid item xs={2}></Grid>
+  <Grid item xs={8}>
+   
+    <Chart
             type="line"
             data={{
               labels: data[0]?.data?.map((d) => d.EventTime) ?? [],
@@ -79,7 +97,7 @@ function GameChart() {
               })),
             }}
           />
-          <Connection
+           <Connection
             Symbols={data.map((d) => d.internalName)}
             onMessage={(newData) => {
               if (startTime === 0) setStartTime(newData.EventTime);
@@ -103,12 +121,17 @@ function GameChart() {
               });
             }}
           />
-        </div>
-        <div className="flex justify-center items-center h-1/3">
-          <Guess />
-        </div>
-      </div>
-    </div>
+    
+  </Grid>
+  <Grid item xs={2}></Grid>
+  <Grid item xs={12}>
+   <Guess /> 
+  </Grid>
+  <Grid item xs={12}>
+    <Game Symbols={data.map((d) => d.internalName)}/> 
+  </Grid>
+</Grid>
+</>
   );
 }
 
