@@ -39,12 +39,14 @@ const Connection = (props: {
 }) => {
   const [ws, setWs] = useState<WebSocket | null>(null);
 
+  const close = () => {
+    if (ws) ws.close();
+  };
+
   useEffect(() => {
-    const requesparams = props.Symbols.map((s) => s + "@kline_1s");
-    console.log(requesparams, props.Symbols);
     const request = {
       method: "SUBSCRIBE",
-      params: requesparams,
+      params: props.Symbols.map((s) => s + "@kline_1s"),
       id: 1,
     };
     const wsClient = new WebSocket(URL_WEB_SOCKET);
@@ -53,26 +55,21 @@ const Connection = (props: {
       wsClient.send(JSON.stringify(request));
     };
     wsClient.onclose = () => console.log("ws closed");
+    wsClient.onmessage = (evt) => {
+      const trade = JSON.parse(evt.data);
+      if (!trade.k) return;
+      const currData: IDataPerFrame = {
+        Symbol: trade["k"]["s"],
+        EventTime: trade["E"],
+        Price: (Number(trade["k"]["o"]) + Number(trade["k"]["c"])) / 2,
+      };
+      console.log(currData);
+      props.onMessage(currData);
+    };
     return () => {
       wsClient.close();
     };
   }, []);
-
-  useEffect(() => {
-    if (ws) {
-      ws.onmessage = (evt) => {
-        const trade = JSON.parse(evt.data);
-        if (!trade.k) return;
-        const currData: IDataPerFrame = {
-          Symbol: trade["k"]["s"],
-          EventTime: trade["E"],
-          Price: (Number(trade["k"]["o"]) + Number(trade["k"]["c"])) / 2,
-        };
-        console.log(currData);
-        props.onMessage(currData);
-      };
-    }
-  }, [ws]);
 
   return <></>;
 };

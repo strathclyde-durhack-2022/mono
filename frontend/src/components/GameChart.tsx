@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import Connection, { IDataPerFrame } from "./Connection";
 
 import Guess from "./Guess.jsx";
@@ -34,7 +34,7 @@ export interface ITickerWithData {
 }
 
 function GameChart() {
-  const [startTime, setStartTime] = useState<number>(0);
+  const [startTime, setStartTime] = useState<number>(1);
   const [data, setData] = useState<ITickerWithData[]>([
     {
       internalName: "btcusdt",
@@ -59,8 +59,6 @@ function GameChart() {
     },
   ]);
 
-  useEffect(() => {}, []);
-
   return (
     <div className="h-screen w-screen space-y-16 overflow-hidden">
       <Nav />
@@ -82,7 +80,6 @@ function GameChart() {
           <Connection
             Symbols={data.map((d) => d.internalName)}
             onMessage={(newData) => {
-              if (startTime === 0) setStartTime(newData.EventTime);
               setData((prev) => {
                 return prev.map((d) => {
                   if (
@@ -90,13 +87,20 @@ function GameChart() {
                     newData.Symbol.split("@")[0].toLowerCase()
                   ) {
                     if (d.startingPrice === 0) d.startingPrice = newData.Price;
-                    d.data.push({
-                      ...newData,
-                      Price:
-                        ((newData.Price - d.startingPrice) / d.startingPrice) *
-                        100,
-                      EventTime: newData.EventTime - startTime,
-                    });
+                    return {
+                      ...d,
+                      data: [
+                        ...d.data,
+                        {
+                          ...newData,
+                          Price:
+                            ((newData.Price - d.startingPrice) /
+                              d.startingPrice) *
+                            100,
+                          EventTime: Math.round(newData.EventTime - startTime),
+                        },
+                      ],
+                    };
                   }
                   return d;
                 });
