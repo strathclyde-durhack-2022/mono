@@ -22,12 +22,6 @@ export default function HistList(props:{hist: IHistory[]}): JSX.Element {
                     scope="col"
                     className="px-6 py-3 text-lg font-medium text-gray-900 uppercase tracking-wider"
                   >
-                    Guess
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-6 py-3 text-lg font-medium text-gray-900 uppercase tracking-wider"
-                  >
                     Actual
                   </th>
                   <th
@@ -46,7 +40,7 @@ export default function HistList(props:{hist: IHistory[]}): JSX.Element {
                             Correct
                         </span>
                   } else{
-                    x = <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100 text-green-800">
+                    x = <span className="px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-red-100 text-red-800">
                             Wrong
                         </span>
                   }
@@ -55,7 +49,6 @@ export default function HistList(props:{hist: IHistory[]}): JSX.Element {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="text-lg font-medium text-gray-500">{elem.coin}</div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900">{elem.guess}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-base font-medium text-gray-900">{elem.result}</td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       {x}
