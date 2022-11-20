@@ -12,8 +12,8 @@ import {
 import { useEffect, useState } from "react";
 import Connection, { IDataPerFrame } from "./Connection";
 
-import Guess from "./Guess.jsx"
-import Nav from "./Nav.jsx"
+import Guess from "./Guess.jsx";
+import Nav from "./Nav.jsx";
 
 ChartJS.register(
   CategoryScale,
@@ -62,50 +62,50 @@ function GameChart() {
   useEffect(() => {}, []);
 
   return (
-    <div style={{ width: "80%" }}>
-    <div className="h-screen w-screen space-y-32 overflow-hidden">
+    <div className="h-screen w-screen space-y-16 overflow-hidden">
       <Nav />
       <div className="flex flex-row justify-between space-x-32 items-start h-[90vw] mx-24">
         <div className="flex flex-col items-center w-screen">
           <Chart
-        type="line"
-        data={{
-          labels: data[0]?.data?.map((d) => d.EventTime) ?? [],
-          datasets: data.map((d) => ({
-            data: d.data.map((d) => d.Price),
-            label: d.label,
-            borderColor: d.colour,
-            backgroundColor: "transparent",
-            pointBorderColor: "transparent",
-            tension: 0,
-          })),
-        }}
-      />
-      <Connection
-        Symbols={data.map((d) => d.internalName)}
-        onMessage={(newData) => {
-          if (startTime === 0) setStartTime(newData.EventTime);
-          setData((prev) => {
-            return prev.map((d) => {
-              if (
-                d.internalName === newData.Symbol.split("@")[0].toLowerCase()
-              ) {
-                if (d.startingPrice === 0) d.startingPrice = newData.Price;
-                d.data.push({
-                  ...newData,
-                  Price:
-                    ((newData.Price - d.startingPrice) / d.startingPrice) * 100,
-                  EventTime: newData.EventTime - startTime,
+            type="line"
+            data={{
+              labels: data[0]?.data?.map((d) => d.EventTime) ?? [],
+              datasets: data.map((d) => ({
+                data: d.data.map((d) => d.Price),
+                label: d.label,
+                borderColor: d.colour,
+                backgroundColor: "transparent",
+                pointBorderColor: "transparent",
+              })),
+            }}
+          />
+          <Connection
+            Symbols={data.map((d) => d.internalName)}
+            onMessage={(newData) => {
+              if (startTime === 0) setStartTime(newData.EventTime);
+              setData((prev) => {
+                return prev.map((d) => {
+                  if (
+                    d.internalName ===
+                    newData.Symbol.split("@")[0].toLowerCase()
+                  ) {
+                    if (d.startingPrice === 0) d.startingPrice = newData.Price;
+                    d.data.push({
+                      ...newData,
+                      Price:
+                        ((newData.Price - d.startingPrice) / d.startingPrice) *
+                        100,
+                      EventTime: newData.EventTime - startTime,
+                    });
+                  }
+                  return d;
                 });
-              }
-              return d;
-            });
-          });
-        }}
-      />
+              });
+            }}
+          />
         </div>
         <div className="flex justify-center items-center h-1/3">
-            <Guess />
+          <Guess />
         </div>
       </div>
     </div>
