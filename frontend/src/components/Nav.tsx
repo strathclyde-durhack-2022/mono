@@ -8,6 +8,7 @@ const Nav = () => {
                     <li><Link to="/" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">Home</Link></li>
                     <li><Link to="/game" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">Graph</Link></li>
                     <li><Link to="/history" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">History</Link></li>
+                    <li><Link to="/leaderboard" className="cursor-pointer transition font-bold duration-500 ease-in-out hover:text-blue-700">Leaderboard</Link></li>
                 </ul>
             </div>
         </div>

@@ -2,6 +2,7 @@
 import Home from "./pages/Home.jsx"
 import GameChart from "./components/GameChart"
 import History from "./components/History"
+import Leaderboard from "./components/Leaderboard"
 
 import {
   BrowserRouter as Router,
@@ -16,6 +17,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/game" element={<GameChart />} />
         <Route path="/history" element={<History />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
       </Routes>
     </Router>
   )
