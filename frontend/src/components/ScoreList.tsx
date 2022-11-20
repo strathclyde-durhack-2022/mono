@@ -37,22 +37,30 @@ function ScoreList(props: { players: IScore[] }) {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {props.players.map((player) => (
+                {props.players.length > 0 ? (
+                  props.players.map((player) => (
+                    <tr className="text-center">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {player.username}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {player.score}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {player.totalGuess}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        {Math.round((player.score / player.totalGuess) * 100)}%
+                      </td>
+                    </tr>
+                  ))
+                ) : (
                   <tr className="text-center">
                     <td className="px-6 py-4 whitespace-nowrap">
-                      {player.username}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {player.score}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {player.totalGuess}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {Math.round((player.score / player.totalGuess) * 100)}%
+                      No scores yet!
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
