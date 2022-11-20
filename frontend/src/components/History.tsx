@@ -11,7 +11,7 @@ export const MOCK_HIST: IHistory[] = [
 
 function History() {
     return (
-        <div className='history'>
+        <div className='h-screen w-screen'>
             <HistList hist={MOCK_HIST}  />
         </div>
     )
