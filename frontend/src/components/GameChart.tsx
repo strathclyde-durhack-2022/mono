@@ -37,7 +37,7 @@ export interface ITickerWithData {
   startingPrice: number;
 }
 
-export const MAX_TICKS = 10;
+export const MAX_TICKS = 60;
 
 const DEFAULT_COINS: ITickerWithData[] = [
   { internalName: "btcusdt", label: "BTC", colour: "orange" },

@@ -8,7 +8,7 @@ function HomeMain() {
           sm:text-2xl
           min-[0px]:text-xl
           max-w-md z-4 font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-blue-900
-          ">blockguess — the game in which you can simulate being a day trader!</h1>
+          ">BetterBetter — quit the market, or become a better better!</h1>
     </div>
   )
 }
