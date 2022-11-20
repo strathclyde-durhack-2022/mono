@@ -1,5 +1,5 @@
+import { ICoin } from "../models/Interface";
 import GuessDropdown from "./GuessDropdown";
-import { ICoin } from "./Interface";
 const Guess = (props: {
   coins: ICoin[];
   onChange: (selected: string) => void;

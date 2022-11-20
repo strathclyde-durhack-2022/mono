@@ -1,7 +1,6 @@
-export interface IHistory { //for mockData, subject to change
+export interface IHistory {
     coin: string;
-    guess: number;
-    result: number;
+    result: string;
 }
 
 export interface IScore {
@@ -10,4 +9,4 @@ export interface IScore {
     totalGuess:number;
   }
   
-type ICoin = string;
+export type ICoin = string;

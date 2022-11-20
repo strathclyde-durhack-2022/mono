@@ -14,10 +14,10 @@ import Connection, { IDataPerFrame } from "./Connection";
 
 import Guess from "./Guess.jsx";
 import Nav from "./Nav.jsx";
-import { ICoin } from "./Interface";
 
 import ModalFail from "./ModalFail.jsx";
 import ModalSuccess from "./ModalSuccess.jsx";
+import { ICoin, IHistory } from "../models/Interface";
 
 ChartJS.register(
   CategoryScale,
@@ -97,6 +97,7 @@ function GameChart() {
   }
 
   async function saveData(name: string, correct: number) {
+    if (!selectedCoin) return;
     await fetch("http://localhost:5000/", {
       method: "POST",
       headers: {
@@ -104,6 +105,21 @@ function GameChart() {
       },
       body: JSON.stringify({ username: name, correct }),
     });
+    const historyData: IHistory[] = JSON.parse(
+      localStorage.getItem("HISTORY_DATA") || "[]"
+    );
+    localStorage.setItem(
+      `HISTORY_DATA`,
+      JSON.stringify([
+        ...historyData,
+        {
+          coin: selectedCoin,
+          result: getFinalScore()
+            .map((d, i) => `${i + 1}. ${d.label}`)
+            .join(", "),
+        },
+      ])
+    );
   }
 
   const reset = () => {

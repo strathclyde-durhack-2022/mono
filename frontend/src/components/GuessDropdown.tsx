@@ -3,7 +3,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 
 import GuessItem from "./GuessItem.js";
-import { ICoin } from "./Interface.js";
+import { ICoin } from "../models/Interface";
 
 export default function GuessDropdown(props: {
   ticker: ICoin[];
