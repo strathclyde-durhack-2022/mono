@@ -33,7 +33,7 @@ const ModalFail = ({ modalState, closeModalFunction, styles, message, backMessag
                             md:text-xl
                             sm:text-lg
                             min-[0px]:text-lg
-                            ">You didn't get it correctly :(</h2>
+                            ">Wrong guess :(</h2>
                             <p className="
                             text-gray-600
                             lg:text-sm
