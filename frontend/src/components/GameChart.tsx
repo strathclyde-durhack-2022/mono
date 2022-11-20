@@ -12,6 +12,9 @@ import {
 import { useEffect, useState } from "react";
 import Connection, { IDataPerFrame } from "./Connection";
 
+import Guess from "./Guess.jsx"
+import Nav from "./Nav.jsx"
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -60,7 +63,11 @@ function GameChart() {
 
   return (
     <div style={{ width: "80%" }}>
-      <Chart
+    <div className="h-screen w-screen space-y-32 overflow-hidden">
+      <Nav />
+      <div className="flex flex-row justify-between space-x-32 items-start h-[90vw] mx-24">
+        <div className="flex flex-col items-center w-screen">
+          <Chart
         type="line"
         data={{
           labels: data[0]?.data?.map((d) => d.EventTime) ?? [],
@@ -96,6 +103,11 @@ function GameChart() {
           });
         }}
       />
+        </div>
+        <div className="flex justify-center items-center h-1/3">
+            <Guess />
+        </div>
+      </div>
     </div>
   );
 }
