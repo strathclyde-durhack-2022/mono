@@ -82,16 +82,28 @@ function GameChart() {
     setIsOpenSuccess(true);
   }
 
-  function closeModalSuccess() {
+  function closeModalSuccess(name: string) {
     setIsOpenSuccess(false);
+    saveData(name, 1);
   }
 
   function openModalFailure() {
     setIsOpenFailure(true);
   }
 
-  function closeModalFailure() {
+  function closeModalFailure(name: string) {
     setIsOpenFailure(false);
+    saveData(name, 0);
+  }
+
+  async function saveData(name: string, correct: number) {
+    await fetch("http://localhost:5000/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: name, correct }),
+    });
   }
 
   const reset = () => {
